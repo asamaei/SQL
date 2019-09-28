@@ -25,6 +25,27 @@ WHERE hire_date>to_date('31-DEC-1997')
 
 #Display how many people work the same job in the same department. Name these results Dept#,  Job and HowMany. Include only jobs that involve more than one person. Sort  the output , so that jobs with the most people  are shown first.
 
+SELECT department_id AS "Dept#",job_id AS "Job",count(job_id) AS "HowMany" FROM employees
+GROUP BY job_id,department_id
+HAVING count(job_id)>1
+ORDER BY count(job_id) DESC
+
+
 #For each job title display the job title and total amount paid each month for this type of the job. Exclude titles AD_PRES and AD_VP and also include only jobs that require more than $15,000. Sort the output so that top paid jobs are shown first.
 
+
+SELECT job_id , SUM(salary) AS "Total salary" 
+FROM employees
+GROUP BY job_id
+HAVING job_id!='AD_PRES' AND JOB_id!='AD_VP' AND SUM(salary)>15000
+ORDER BY SUM(salary) DESC ;
+
+
+
 #For each  department show the latest and earliest hire date, but exclude departments 10 and 20 and also exclude those departments where the last person was hired in this century.   Sort the output so that most recent latest hire dates are shown first.
+select max(hire_date) "Latest", min(hire_date) "Oldest", department_id
+from employees
+group by department_id
+having department_id not in (10,20) and  to_char(max(hire_date),'cc') != to_char(sysdate,'cc')
+
+order by "Latest" desc;
